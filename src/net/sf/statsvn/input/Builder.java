@@ -34,6 +34,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import net.sf.statcvs.Messages;
@@ -71,15 +72,15 @@ import net.sf.statsvn.output.SvnConfigurationOptions;
 public class Builder implements SvnLogBuilder {
     private final Set atticFileNames = new HashSet();
 
-    private final Map authors = new HashMap();
+    private final Map authors = new ConcurrentHashMap(10240);
 
     private FileBuilder currentFileBuilder = null;
 
-    private final Map directories = new HashMap();
+    private final Map directories = new ConcurrentHashMap(10240);
 
     private final FilePatternMatcher excludePattern;
 
-    private final Map fileBuilders = new HashMap();
+    private final Map fileBuilders = new ConcurrentHashMap(10240);
 
     private final FilePatternMatcher includePattern;
 
@@ -89,7 +90,7 @@ public class Builder implements SvnLogBuilder {
 
     private Date startDate = null;
 
-    private final Map symbolicNames = new HashMap();
+    private final Map symbolicNames = new ConcurrentHashMap(10240);
 
     private final Pattern tagsPattern;
     

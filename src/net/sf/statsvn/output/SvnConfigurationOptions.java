@@ -1,5 +1,5 @@
 /*
- StatCvs - CVS statistics generation
+Version StatCvs - CVS statistics generation
  Copyright (C) 2002  Lukasz Pekacki <lukasz@pekacki.de>
  http://statcvs.sf.net/
 
@@ -44,9 +44,9 @@ import net.sf.statsvn.util.svnkit.SvnKitProcessor;
  * @version $Id: ConfigurationOptions.java,v 1.17 2005/03/20 19:12:25 squig Exp $
  */
 public final class SvnConfigurationOptions {
-	private static final int DEFAULT_THRESHOLD_MS_FOR_CONCURRENCY = 2000;
+	private static final int DEFAULT_THRESHOLD_MS_FOR_CONCURRENCY = 100;
 
-	private static final int DEFAULT_NUMBER_THREADS = 25;
+	private static final int DEFAULT_NUMBER_THREADS = 100;
 
 	private static String cacheDir = "";
 

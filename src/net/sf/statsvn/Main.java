@@ -273,7 +273,7 @@ public final class Main {
                         + ConfigurationOptions.getLogFileName()
                         + "'"
                         + (ConfigurationOptions.getExcludePattern() != null ? " exclude pattern '" + ConfigurationOptions.getExcludePattern() + "'"
-                                : "No exclude pattern"));
+                                : " No exclude pattern"));
 
         FileInputStream logFile = null;
         Builder builder = null;

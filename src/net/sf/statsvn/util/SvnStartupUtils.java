@@ -24,26 +24,29 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 	public static final String SVN_MINIMUM_VERSION_DIFF_PER_REV = "1.4.0";
 
 	private static final String SVN_VERSION_LINE_PATTERN = ".* [0-9]+\\.[0-9]+\\.[0-9]+.*";
+	static Pattern pattern_SVN_VERSION_LINE_PATTERN = Pattern.compile(SVN_VERSION_LINE_PATTERN);
 
 	private static final String SVN_VERSION_PATTERN = "[0-9]+\\.[0-9]+\\.[0-9]+";
 
+	protected ISvnProcessor processor;
 
-    protected ISvnProcessor processor;
+	/**
+	 * Invokes various calls needed during StatSVN's startup, including the svn
+	 * version command line.
+	 */
+	public SvnStartupUtils(ISvnProcessor processor) {
+		this.processor = processor;
+	}
 
-    /**
-     * Invokes various calls needed during StatSVN's startup, including the svn version command line.   
-     */
-    public SvnStartupUtils(ISvnProcessor processor) {
-        this.processor = processor;
-    }
+	protected ISvnProcessor getProcessor() {
+		return processor;
+	}
 
-    protected ISvnProcessor getProcessor() {
-        return processor;
-    }
-
-	/* (non-Javadoc)
-     * @see net.sf.statsvn.util.IVersionProcessor#checkSvnVersionSufficient()
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.sf.statsvn.util.IVersionProcessor#checkSvnVersionSufficient()
+	 */
 	public synchronized String checkSvnVersionSufficient() throws SvnVersionMismatchException {
 		ProcessUtils pUtils = null;
 		try {
@@ -54,7 +57,7 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 
 			while (reader.hasNextLine()) {
 				final String line = reader.nextLine();
-				if (line.matches(SVN_VERSION_LINE_PATTERN)) {
+				if (pattern_SVN_VERSION_LINE_PATTERN.matcher(line).matches()) {
 					// We have our version line
 					final Pattern pRegex = Pattern.compile(SVN_VERSION_PATTERN);
 					final Matcher m = pRegex.matcher(line);
@@ -63,12 +66,12 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 						final String curVersion[] = versionString.split("\\.");
 						final String minVersion[] = SVN_MINIMUM_VERSION.split("\\.");
 						boolean versionSuccess = false;
-						
+
 						for (int i = 0; i < Math.min(minVersion.length, curVersion.length); i++) {
 							final int curVersionNum = Integer.parseInt(curVersion[i]);
 							final int minVersionNum = Integer.parseInt(minVersion[i]);
-							
-							if(curVersionNum == minVersionNum) {
+
+							if (curVersionNum == minVersionNum) {
 								continue;
 							} else if (curVersionNum > minVersionNum) {
 								versionSuccess = true;
@@ -78,20 +81,18 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 								break;
 							}
 						}
-						
+
 						if (versionSuccess) {
 							return versionString;
 						} else {
 							throw new SvnVersionMismatchException(versionString, SVN_MINIMUM_VERSION);
 						}
-/*
-						// we perform a simple string comparison against the version numbers
-						if (versionString.compareTo(SVN_MINIMUM_VERSION) >= 0) {
-							return versionString; // success
-						} else {
-							throw new SvnVersionMismatchException(versionString, SVN_MINIMUM_VERSION);
-						}
-*/
+						/*
+						 * // we perform a simple string comparison against the version numbers if
+						 * (versionString.compareTo(SVN_MINIMUM_VERSION) >= 0) { return versionString;
+						 * // success } else { throw new SvnVersionMismatchException(versionString,
+						 * SVN_MINIMUM_VERSION); }
+						 */
 					}
 				}
 			}
@@ -116,11 +117,15 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 		throw new SvnVersionMismatchException();
 	}
 
-	/* (non-Javadoc)
-     * @see net.sf.statsvn.util.IVersionProcessor#checkDiffPerRevPossible(java.lang.String)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.sf.statsvn.util.IVersionProcessor#checkDiffPerRevPossible(java.lang.
+	 * String)
+	 */
 	public synchronized boolean checkDiffPerRevPossible(final String version) {
+		return new Version(version).compareTo(new Version(SVN_MINIMUM_VERSION_DIFF_PER_REV)) >= 0;
 		// we perform a simple string comparison against the version numbers
-		return version.compareTo(SVN_MINIMUM_VERSION_DIFF_PER_REV) >= 0;
+		// return version.compareTo(SVN_MINIMUM_VERSION_DIFF_PER_REV) >= 0;
 	}
 }

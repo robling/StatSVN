@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import net.sf.statcvs.Messages;
 
@@ -25,7 +26,7 @@ public final class EnvReport {
 	        "user.language" };
 
 	static final String SVN_VERSION_COMMAND = "svn --version";
-
+	
 	static final String SVN_VERSION_LINE_PATTERN = ".* [0-9]+\\.[0-9]+\\.[0-9]+.*";
 
 	static final String KEY_SVN_ABLE_TO_RUN = "svn.able.to.run";
@@ -33,6 +34,10 @@ public final class EnvReport {
 	static final String KEY_SVN_VERSION = "svn.reportedversion";
 
 	static final String KEY_STATSVN_VERSION = "statsvn.reportedversion";
+	
+	
+	static Pattern pattern_SVN_VERSION_LINE_PATTERN= Pattern.compile(SVN_VERSION_LINE_PATTERN);
+ 
 
 	private EnvReport() {
 		// no public ctor
@@ -122,7 +127,7 @@ public final class EnvReport {
 
 			input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			while ((line = input.readLine()) != null) {
-				if (line.matches(SVN_VERSION_LINE_PATTERN)) {
+				if (pattern_SVN_VERSION_LINE_PATTERN.matcher(line).matches()) {
 					// We have our version line
 					versionLine = line.trim();
 					break;

@@ -1,5 +1,8 @@
 package net.sf.statsvn.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringUtils {
     /**
      * This method is a 1.4 replacement of the String.replace(CharSequence, CharSequence) found in 1.5.
@@ -13,23 +16,7 @@ public class StringUtils {
             return originalString;
         }
 
-        final StringBuffer newString = new StringBuffer(originalString.length());
-        int index = 0;
-        final int originalLength = originalPattern.length();
-        int previousIndex = 0;
-
-        while ((index = originalString.indexOf(originalPattern, index)) != -1) {
-            newString.append(originalString.substring(previousIndex, index)).append(newPattern);
-            index += originalLength;
-            previousIndex = index;
-        }
-
-        if (previousIndex == 0) {
-            newString.append(originalString);
-        } else if (previousIndex != originalString.length()) {
-            newString.append(originalString.substring(previousIndex));
-        }
-
-        return newString.toString();
+        return Pattern.compile(originalPattern , Pattern.LITERAL).matcher(
+        		originalString).replaceAll(Matcher.quoteReplacement(newPattern));
     }
 }
