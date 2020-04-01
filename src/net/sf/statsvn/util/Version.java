@@ -1,6 +1,9 @@
 package net.sf.statsvn.util;
 
+import java.util.regex.Pattern;
+
 public class Version implements Comparable<Version> {
+	static Pattern pattern_Version = Pattern.compile("[0-9]+(\\.[0-9]+)*");
 
     private String version;
 
@@ -11,7 +14,7 @@ public class Version implements Comparable<Version> {
     public Version(String version) {
         if(version == null)
             throw new IllegalArgumentException("Version can not be null");
-        if(!version.matches("[0-9]+(\\.[0-9]+)*"))
+        if(!pattern_Version.matcher(version).matches())
             throw new IllegalArgumentException("Invalid version format");
         this.version = version;
     }
@@ -44,9 +47,10 @@ public class Version implements Comparable<Version> {
             return false;
         return this.compareTo((Version) that) == 0;
     }
+    
+    
     public static void main(String[] args) {
 		System.out.println(new Version("1.4.0").compareTo(new Version("1.13.0")));
-		
 		System.out.println("1.4.0".compareTo("1.13.0"));
 
 	}

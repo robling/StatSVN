@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project statsvn">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/statsvn.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="net.sf.statsvn.Main"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/ant.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/backport-util-concurrent-3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/statcvs-0.7.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/sqljet-1.1.12.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/antlr-runtime-3.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/sequence-library-1.0.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jna-platform-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jna-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.connector-factory-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.core-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.pageant-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.sshagent-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.svnkit-trilead-ssh2-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.usocket-jna-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/jsch.agentproxy.usocket-nc-0.0.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/lz4-java-1.4.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/svnkit-1.10.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/svnkit-cli-1.10.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/svnkit-javahl16-1.10.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/trilead-ssh2-1.0.0-build222.jar"/>
+        </jar>
+    </target>
+</project>

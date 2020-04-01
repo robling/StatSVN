@@ -24,9 +24,10 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 	public static final String SVN_MINIMUM_VERSION_DIFF_PER_REV = "1.4.0";
 
 	private static final String SVN_VERSION_LINE_PATTERN = ".* [0-9]+\\.[0-9]+\\.[0-9]+.*";
-	static Pattern pattern_SVN_VERSION_LINE_PATTERN = Pattern.compile(SVN_VERSION_LINE_PATTERN);
+	private static Pattern pattern_SVN_VERSION_LINE_PATTERN = Pattern.compile(SVN_VERSION_LINE_PATTERN);
 
 	private static final String SVN_VERSION_PATTERN = "[0-9]+\\.[0-9]+\\.[0-9]+";
+	final static Pattern pRegex = Pattern.compile(SVN_VERSION_PATTERN);
 
 	protected ISvnProcessor processor;
 
@@ -54,45 +55,17 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 			pUtils = ProcessUtils.call(SVN_VERSION_COMMAND);
 			final InputStream istream = pUtils.getInputStream();
 			final LookaheadReader reader = new LookaheadReader(new InputStreamReader(istream));
-
 			while (reader.hasNextLine()) {
 				final String line = reader.nextLine();
 				if (pattern_SVN_VERSION_LINE_PATTERN.matcher(line).matches()) {
-					// We have our version line
-					final Pattern pRegex = Pattern.compile(SVN_VERSION_PATTERN);
 					final Matcher m = pRegex.matcher(line);
 					if (m.find()) {
 						final String versionString = line.substring(m.start(), m.end());
-						final String curVersion[] = versionString.split("\\.");
-						final String minVersion[] = SVN_MINIMUM_VERSION.split("\\.");
-						boolean versionSuccess = false;
-
-						for (int i = 0; i < Math.min(minVersion.length, curVersion.length); i++) {
-							final int curVersionNum = Integer.parseInt(curVersion[i]);
-							final int minVersionNum = Integer.parseInt(minVersion[i]);
-
-							if (curVersionNum == minVersionNum) {
-								continue;
-							} else if (curVersionNum > minVersionNum) {
-								versionSuccess = true;
-								break;
-							} else if (curVersionNum < minVersionNum) {
-								versionSuccess = false;
-								break;
-							}
-						}
-
-						if (versionSuccess) {
+						if (new Version(versionString).compareTo(new Version(SVN_MINIMUM_VERSION)) >= 0) {
 							return versionString;
 						} else {
 							throw new SvnVersionMismatchException(versionString, SVN_MINIMUM_VERSION);
 						}
-						/*
-						 * // we perform a simple string comparison against the version numbers if
-						 * (versionString.compareTo(SVN_MINIMUM_VERSION) >= 0) { return versionString;
-						 * // success } else { throw new SvnVersionMismatchException(versionString,
-						 * SVN_MINIMUM_VERSION); }
-						 */
 					}
 				}
 			}
@@ -125,7 +98,5 @@ public class SvnStartupUtils implements ISvnVersionProcessor {
 	 */
 	public synchronized boolean checkDiffPerRevPossible(final String version) {
 		return new Version(version).compareTo(new Version(SVN_MINIMUM_VERSION_DIFF_PER_REV)) >= 0;
-		// we perform a simple string comparison against the version numbers
-		// return version.compareTo(SVN_MINIMUM_VERSION_DIFF_PER_REV) >= 0;
 	}
 }
