@@ -3,7 +3,9 @@ package net.sf.statsvn.util.svnkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.statsvn.output.SvnConfigurationOptions;
 import net.sf.statsvn.util.ISvnProcessor;
@@ -28,15 +30,15 @@ public class SvnKitPropget extends SvnPropgetUtils {
 
     protected class SvnKitPropertyHandler implements ISVNPropertyHandler {
 
-        protected List binaryFiles;
+        protected Set binaryFiles;
         SvnKitPropget propgetUtils;
 
-        public SvnKitPropertyHandler(SvnKitPropget propgetUtils, List binaryFiles) {
+        public SvnKitPropertyHandler(SvnKitPropget propgetUtils, Set binaryFiles) {
             this.binaryFiles = binaryFiles;
             this.propgetUtils = propgetUtils;
         }
 
-        protected List getBinaryFiles() {
+        protected Set getBinaryFiles() {
             return binaryFiles;
         }
 
@@ -70,10 +72,10 @@ public class SvnKitPropget extends SvnPropgetUtils {
         super(processor);
     }
 
-    public List getBinaryFiles() {
+    public Set getBinaryFiles() {
         if (binaryFiles == null) {
 
-            binaryFiles = new ArrayList();
+            binaryFiles = new HashSet();
             try {
                 
                 getManager().getWCClient().doGetProperty(getCheckoutDirectory(), SVNProperty.MIME_TYPE, SVNRevision.WORKING, SVNRevision.WORKING,

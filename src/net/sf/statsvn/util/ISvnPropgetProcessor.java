@@ -2,6 +2,7 @@ package net.sf.statsvn.util;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 
@@ -17,7 +18,7 @@ public interface ISvnPropgetProcessor {
      * 
      * @return the list of binary files
      */
-    public abstract List getBinaryFiles();
+    public abstract Set getBinaryFiles();
 
     /**
      * It was first thought that a the mime-type of a file's previous revision

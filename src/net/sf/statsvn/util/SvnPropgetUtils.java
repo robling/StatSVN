@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.sf.statcvs.util.LookaheadReader;
 import net.sf.statsvn.output.SvnConfigurationOptions;
@@ -19,7 +20,7 @@ import net.sf.statsvn.output.SvnConfigurationOptions;
  */
 public  class SvnPropgetUtils implements ISvnPropgetProcessor {
 
-	protected List binaryFiles;
+	protected Set binaryFiles;
 
     protected ISvnProcessor processor;
 
@@ -81,7 +82,7 @@ public  class SvnPropgetUtils implements ISvnPropgetProcessor {
 	/* (non-Javadoc)
      * @see net.sf.statsvn.util.ISvnPropgetProcessor#getBinaryFiles()
      */
-	public List getBinaryFiles() {
+	public Set getBinaryFiles() {
 		if (binaryFiles == null) {
 			ProcessUtils pUtils = null;
 			try {
@@ -128,7 +129,7 @@ public  class SvnPropgetUtils implements ISvnPropgetProcessor {
 	 *            stream equivalent to an svn propget command
 	 */
 	protected void loadBinaryFiles(final ProcessUtils pUtils) {
-		binaryFiles = new ArrayList();
+		binaryFiles = new HashSet();
 		final LookaheadReader mimeReader = new LookaheadReader(new InputStreamReader(pUtils.getInputStream()));
 		try {
 			while (mimeReader.hasNextLine()) {

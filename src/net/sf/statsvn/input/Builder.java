@@ -72,15 +72,15 @@ import net.sf.statsvn.output.SvnConfigurationOptions;
 public class Builder implements SvnLogBuilder {
     private final Set atticFileNames = new HashSet();
 
-    private final Map authors = new ConcurrentHashMap(10240);
+    private final Map authors = new HashMap(10240);
 
     private FileBuilder currentFileBuilder = null;
 
-    private final Map directories = new ConcurrentHashMap(10240);
+    private final Map directories = new HashMap(10240);
 
     private final FilePatternMatcher excludePattern;
 
-    private final Map fileBuilders = new ConcurrentHashMap(10240);
+    private final Map fileBuilders = new HashMap(10240);
 
     private final FilePatternMatcher includePattern;
 
@@ -90,7 +90,7 @@ public class Builder implements SvnLogBuilder {
 
     private Date startDate = null;
 
-    private final Map symbolicNames = new ConcurrentHashMap(10240);
+    private final Map symbolicNames = new HashMap(10240);
 
     private final Pattern tagsPattern;
     

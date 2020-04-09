@@ -132,7 +132,35 @@ public class SvnXmlLogFileHandler extends DefaultHandler {
 			warning("Invalid date specified.");
 		}
 	}
-
+	/**
+	 * Handles the start of an xml element and redirects to the appropriate
+	 * start* method.
+	 * 
+	 * @throws SAXException
+	 *             unexpected event.
+	 */
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+		super.startElement(uri, localName, qName, attributes);
+		stringData = "";
+		String eName = localName; // element name
+		if ("".equals(eName)) {
+			eName = qName; // namespaceAware = false
+		}
+		if (eName.equals(LOG)) {
+			startLog();
+		} else if (eName.equals(LOGENTRY)) {
+			startLogEntry(attributes);
+		} else if (eName.equals(AUTHOR) || eName.equals(DATE) || eName.equals(MSG)) {
+			startAuthorDateMsg();
+		} else if (eName.equals(PATHS)) {
+			startPaths();
+		} else if (eName.equals(PATH)) {
+			startPath(attributes);
+		} else {
+			fatalError(INVALID_SVN_LOG_FILE);
+		}
+	}
+	
 	/**
 	 * Handles the end of an xml element and redirects to the appropriate end*
 	 * method.
@@ -291,34 +319,7 @@ public class SvnXmlLogFileHandler extends DefaultHandler {
 		checkLastElement(LOGENTRY);
 	}
 
-	/**
-	 * Handles the start of an xml element and redirects to the appropriate
-	 * start* method.
-	 * 
-	 * @throws SAXException
-	 *             unexpected event.
-	 */
-	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-		super.startElement(uri, localName, qName, attributes);
-		stringData = "";
-		String eName = localName; // element name
-		if ("".equals(eName)) {
-			eName = qName; // namespaceAware = false
-		}
-		if (eName.equals(LOG)) {
-			startLog();
-		} else if (eName.equals(LOGENTRY)) {
-			startLogEntry(attributes);
-		} else if (eName.equals(AUTHOR) || eName.equals(DATE) || eName.equals(MSG)) {
-			startAuthorDateMsg();
-		} else if (eName.equals(PATHS)) {
-			startPaths();
-		} else if (eName.equals(PATH)) {
-			startPath(attributes);
-		} else {
-			fatalError(INVALID_SVN_LOG_FILE);
-		}
-	}
+
 
 	/**
 	 * Start of the log element.
