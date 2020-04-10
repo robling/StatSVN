@@ -11,6 +11,8 @@
 
 * 使用Pattern预编译regex优化字符串匹配和替换过程
 * 默认扩大了部分线程池大小
+* SvnPropgetUtils中文件列表改为使用HashSet存储，避免ArrayList的contains操作耗时，提升性能
+* 设置默认WARNNIG级别日志输出，且输出到启动目录
 
 ** 推荐使用 -svnkit 选项，使用java的客户端进行svn操作，避免反复启动process **
 
