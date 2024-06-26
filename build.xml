@@ -5,13 +5,32 @@
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="compile">
+        <javac srcdir="./src" destdir="./bin" classpath="./lib"/>
+    </target>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/statsvn.jar" filesetmanifest="mergewithoutmain">
+        <mkdir dir="./bin"/>
+        <javac srcdir="./src" destdir="./bin" classpath="./lib">
+            <classpath>
+               <fileset dir="./lib">
+                  <include name="*.jar" />
+               </fileset>
+            </classpath>
+        </javac>
+        <copy todir="./bin" overwrite="false">
+            <fileset dir="${dir.jarfile}/src">
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+        <jar destfile="${dir.jarfile}/statsvn.jar" filesetmanifest="mergewithoutmain" basedir="./bin" includes="**">
             <manifest>
                 <attribute name="Main-Class" value="net.sf.statsvn.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="${dir.jarfile}/bin"/>
+            <fileset dir="${dir.jarfile}/src/net/sf/statsvn">
+                <include name="**.properties"/>
+            </fileset>
             <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/ant.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/backport-util-concurrent-3.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/statcvs-0.7.0.jar"/>
